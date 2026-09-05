@@ -1,0 +1,34 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const news = (await getCollection("nyheter"))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+---
+
+<Layout title="Hjem">
+  <section class="hero">
+    <h1>Velkommen til Hamar Pistolklubb</h1>
+    <p class="lead hero-lead">
+      Vi er en pistolklubb tilsluttet Norges Skytterforbund (NSF), med
+      innendørsbane i kjelleren på Ankerskogen svømmehall i Hamar. Nye
+      skyttere er alltid velkomne – klubben har utlånsvåpen og utstyr så du
+      kan prøve sporten før du investerer selv.
+    </p>
+    <a class="button" href="/skytebane">Se treningstider</a>
+  </section>
+
+  {news.length > 0 && (
+    <section>
+      <h2>Siste nytt</h2>
+      {news.map((post) => (
+        <div class="card">
+          <h3><a href={`/nyheter/${post.id}`}>{post.data.title}</a></h3>
+          <p class="lead">{post.data.summary}</p>
+        </div>
+      ))}
+    </section>
+  )}
+</Layout>
+

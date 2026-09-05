@@ -1,0 +1,43 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const events = (await getCollection("terminliste")).sort(
+  (a, b) => a.data.date.valueOf() - b.data.date.valueOf()
+);
+---
+
+<Layout title="Terminliste">
+  <h1>Terminliste</h1>
+  <p class="lead">
+    Norges Skytterforbunds terminliste viser alle approberte pistolstevner
+    i Norge:
+    <a href="https://www.skyting.no/pistol/terminliste-pistol-2/" target="_blank" rel="noopener">
+      Se terminliste hos NSF
+    </a>
+  </p>
+
+  {events.length > 0 && (
+    <>
+      <h2>Klubbarrangementer</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Dato</th>
+            <th>Arrangement</th>
+            <th>Sted</th>
+          </tr>
+        </thead>
+        <tbody>
+          {events.map((event) => (
+            <tr>
+              <td>{event.data.date.toLocaleDateString("no-NO")}</td>
+              <td>{event.data.title}</td>
+              <td>{event.data.location ?? "—"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  )}
+</Layout>

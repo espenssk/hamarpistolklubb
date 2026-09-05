@@ -1,0 +1,22 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("nyheter")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Layout title="Nyheter">
+  <h1>Nyheter</h1>
+  {posts.length === 0 && <p class="lead">Ingen nyheter enda.</p>}
+  {posts.map((post) => (
+    <div class="card">
+      <h2><a href={`/nyheter/${post.id}`}>{post.data.title}</a></h2>
+      <p class="lead">
+        {post.data.date.toLocaleDateString("no-NO")}
+        {post.data.summary ? ` · ${post.data.summary}` : ""}
+      </p>
+    </div>
+  ))}
+</Layout>

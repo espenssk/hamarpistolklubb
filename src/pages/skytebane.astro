@@ -1,0 +1,45 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const times = [
+  { day: "Tirsdag", hours: "18:00 – 20:30", note: "Innslipp kl. 18:00 og 19:00" },
+  { day: "Lørdag", hours: "13:00 – 16:30", note: "Innslipp kl. 13:00 og 14:00" },
+];
+---
+
+<Layout title="Skytebane">
+  <h1>Skytebane</h1>
+
+  <h2>Ankerskogen skytterhall (Hamar)</h2>
+  <p class="lead">
+    Vår innendørsbane ligger i kjelleren på Ankerskogen svømmehall. Banen har
+    10 standplasser med både pappskiver og elektroniske skiver fra
+    Megalink, samt 10 elektroniske skiver for luftpistol. Vi skyter med
+    kaliber fra 22LR til 38 Spesial, fra september til slutten av april.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Dag</th>
+        <th>Treningstid</th>
+        <th>Merknad</th>
+      </tr>
+    </thead>
+    <tbody>
+      {times.map((t) => (
+        <tr>
+          <td>{t.day}</td>
+          <td>{t.hours}</td>
+          <td>{t.note}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <div class="gallery">
+    <figure class="image-frame">
+      <img src="/images/innendorsbane.png" alt="Innendørsbanen på Ankerskogen" />
+    </figure>
+  </div>
+</Layout>

@@ -1,0 +1,125 @@
+---
+import "../styles/global.css";
+import fs from "node:fs";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Hamar Pistolklubb – bane, terminliste og informasjon." } = Astro.props;
+
+const navItems = [
+  {
+    href: "/",
+    label: "Hjem",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>`,
+  },
+  {
+    href: "/skytebane",
+    label: "Skytebane",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>`,
+  },
+  {
+    href: "/nyheter",
+    label: "Nyheter",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a2 2 0 0 1 2 2v13a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V4z"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>`,
+  },
+  {
+    href: "/terminliste",
+    label: "Terminliste",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18"/></svg>`,
+  },
+  {
+    href: "/sikkerhetskurs",
+    label: "Sikkerhetskurs",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+  },
+  {
+    href: "/kontakt",
+    label: "Kontakt",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>`,
+  },
+];
+
+const currentPath = Astro.url.pathname;
+
+const logoPath = "/images/logo.png";
+const hasLogo = fs.existsSync(new URL(`../../public${logoPath}`, import.meta.url));
+
+const sponsors = [
+  { name: "Landro", href: "https://www.landro.no/", logo: "/sponsors/landro.png" },
+  { name: "Grasrotandelen", href: "https://www.norsk-tipping.no/grasrotandelen/din-mottaker/919817518", logo: "/sponsors/grasrot.jpg" },
+  { name: "Flügger farve", href: "https://www.flugger.no/fluggerandelen/velkommen-til-andelen", logo: "/sponsors/flugger.jpg" },
+].map((s) => ({
+  ...s,
+  // Drop the matching image into public/sponsors/ to replace the text label.
+  hasLogo: fs.existsSync(new URL(`../../public${s.logo}`, import.meta.url)),
+}));
+---
+
+<html lang="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} · Hamar Pistolklubb</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="/">
+          {hasLogo ? (
+            <img class="logo" src={logoPath} alt="Hamar Pistolklubb logo" />
+          ) : (
+            <span class="logo-placeholder" aria-hidden="true"></span>
+          )}
+          Hamar Pistolklubb
+        </a>
+        <nav aria-label="Hovedmeny">
+          <ul class="nav-links">
+            {navItems.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={currentPath === item.href ? "page" : undefined}
+                >
+                  <Fragment set:html={item.icon} />
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <slot />
+    </main>
+
+    <section class="sponsor-strip">
+      <div class="container">
+        <h2>Samarbeidspartnere</h2>
+        <div class="sponsor-logos">
+          {sponsors.map((s) => (
+            <a href={s.href} target="_blank" rel="noopener">
+              {s.hasLogo ? <img src={s.logo} alt={s.name} /> : s.name}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container">
+        <span>&copy; {new Date().getFullYear()} Hamar Pistolklubb</span>
+        <span>
+          <a href="mailto:hamarsportsskytterklubb@gmail.com">hamarsportsskytterklubb@gmail.com</a>
+          · <a href="https://www.facebook.com/groups/423546947796062" target="_blank" rel="noopener">Facebook</a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,135 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Sign up (free) at https://web3forms.com to get your own access key,
+// then replace the TODO below. No backend code required.
+const WEB3FORMS_ACCESS_KEY = "TODO-REPLACE-WITH-YOUR-WEB3FORMS-ACCESS-KEY";
+---
+
+<Layout title="Kontakt">
+  <h1>Kontakt oss</h1>
+  <p class="lead">
+    Har du spørsmål om medlemskap, banetider eller sikkerhetskurs? Send oss
+    en melding, så svarer vi så snart vi kan.
+  </p>
+
+  <form
+    class="card"
+    action="https://api.web3forms.com/submit"
+    method="POST"
+  >
+    <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+    <input type="hidden" name="subject" value="Ny henvendelse fra hjemmesiden" />
+    <input type="hidden" name="redirect" value="/kontakt/takk" />
+    {/* Honeypot: leave empty, catches spam bots */}
+    <input type="checkbox" name="botcheck" class="hidden-field" tabindex="-1" autocomplete="off" />
+
+    <div class="field">
+      <label for="name">Navn *</label>
+      <input id="name" name="name" type="text" required autocomplete="name" />
+    </div>
+
+    <div class="field">
+      <label for="email">E-post *</label>
+      <input id="email" name="email" type="email" required autocomplete="email" />
+    </div>
+
+    <div class="field">
+      <label for="phone">Telefon</label>
+      <input id="phone" name="phone" type="tel" autocomplete="tel" />
+    </div>
+
+    <div class="field">
+      <label for="message">Melding *</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+    </div>
+
+    <div class="field field-checkbox">
+      <label>
+        <input type="checkbox" name="samtykke" value="Ja" required />
+        Jeg samtykker til at Hamar Pistolklubb lagrer og behandler
+        opplysningene jeg oppgir her, for å kunne svare på henvendelsen. *
+      </label>
+    </div>
+
+    <button class="button" type="submit">Send melding</button>
+  </form>
+
+  <h2>Andre måter å nå oss på</h2>
+  <p>E-post: <a href="mailto:hamarsportsskytterklubb@gmail.com">hamarsportsskytterklubb@gmail.com</a></p>
+
+  <h2>Styret</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Verv</th>
+        <th>Navn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Leder</td>
+        <td>Jan Olav Nordhagen</td>
+      </tr>
+      <tr>
+        <td>Nestleder</td>
+        <td>Arne Vemund Bækken</td>
+      </tr>
+      <tr>
+        <td>Styremedlem</td>
+        <td>Bengt Olav Helmersen</td>
+      </tr>
+      <tr>
+        <td>Styremedlem</td>
+        <td>Tore Engemoen</td>
+      </tr>
+      <tr>
+        <td>Styremedlem</td>
+        <td>Jørn Jørgensen</td>
+      </tr>
+      <tr>
+        <td>Styremedlem</td>
+        <td>Jørn Marken</td>
+      </tr>
+    </tbody>
+  </table>
+</Layout>
+
+<style>
+  .field {
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font: inherit;
+  }
+
+  .field-checkbox label {
+    display: flex;
+    gap: 0.5rem;
+    font-weight: 400;
+    align-items: flex-start;
+  }
+
+  .field-checkbox input {
+    margin-top: 0.2rem;
+  }
+
+  .hidden-field {
+    display: none;
+  }
+</style>
