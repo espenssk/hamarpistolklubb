@@ -1,16 +1,25 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Carousel from "../components/Carousel.astro";
+import electronicTarget1 from "../assets/images/electronic_target_1.jpg";
+import indoorsRange2 from "../assets/images/indoors_range_2.jpeg";
+import indoorsRange3 from "../assets/images/indoors_range_3.jpeg";
 
 const times = [
   { day: "Tirsdag", hours: "18:00 – 20:30", note: "Innslipp kl. 18:00 og 19:00" },
   { day: "Lørdag", hours: "13:00 – 16:30", note: "Innslipp kl. 13:00 og 14:00" },
 ];
+
+const slides = [
+  { image: indoorsRange2, alt: "Innendørsbanen på Ankerskogen" },
+  { image: electronicTarget1, alt: "Elektroniske skiver på standplass" },
+  { image: indoorsRange3, alt: "Innendørsbanen på Ankerskogen" },
+];
 ---
 
-<Layout title="Skytebane">
-  <h1>Skytebane</h1>
+<Layout title="Skytebane" description="Åpningstider og fasiliteter på Hamar Pistolklubbs innendørsbane i Ankerskogen svømmehall.">
+  <h1>Ankerskogen, Hamar</h1>
 
-  <h2>Ankerskogen skytterhall (Hamar)</h2>
   <p class="lead">
     Vår innendørsbane ligger i kjelleren på Ankerskogen svømmehall. Banen har
     10 standplasser med både pappskiver og elektroniske skiver fra
@@ -19,6 +28,7 @@ const times = [
   </p>
 
   <table>
+    <caption class="sr-only">Treningstider på Ankerskogen</caption>
     <thead>
       <tr>
         <th>Dag</th>
@@ -37,9 +47,21 @@ const times = [
     </tbody>
   </table>
 
-  <div class="gallery">
-    <figure class="image-frame">
-      <img src="/images/innendorsbane.png" alt="Innendørsbanen på Ankerskogen" />
-    </figure>
+  <div class="split">
+    <div class="split-carousel">
+      <Carousel slides={slides} />
+    </div>
+    <div class="map-embed">
+      <iframe
+        title="Kart til Ankerskogen svømmehall"
+        src="https://www.google.com/maps?q=Ankerskogen+sv%C3%B8mmehall,+Hamar&output=embed"
+        width="100%"
+        height="100%"
+        style="border:0;"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
   </div>
 </Layout>
+

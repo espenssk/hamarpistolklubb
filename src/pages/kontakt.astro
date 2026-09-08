@@ -6,42 +6,87 @@ import Layout from "../layouts/Layout.astro";
 const WEB3FORMS_ACCESS_KEY = "TODO-REPLACE-WITH-YOUR-WEB3FORMS-ACCESS-KEY";
 ---
 
-<Layout title="Kontakt">
+<Layout title="Kontakt" description="Kontakt Hamar Pistolklubb om medlemskap, banetider eller sikkerhetskurs.">
   <h1>Kontakt oss</h1>
   <p class="lead">
-    Har du spørsmål om medlemskap, banetider eller sikkerhetskurs? Send oss
+    Har du spørsmål om medlemskap, sikkerhetskurs eller annet? Send oss
     en melding, så svarer vi så snart vi kan.
   </p>
 
   <form
     class="card"
+    id="contact-form"
     action="https://api.web3forms.com/submit"
     method="POST"
   >
+    {/*
+      Security/sanitation notes (static site, no custom backend):
+      - No file uploads are accepted (no file input exists) - not needed
+        for a general contact enquiry, and it removes an entire class of
+        abuse (malware uploads, storage costs).
+      - `pattern`/`maxlength` on name/phone constrain input client-side;
+        this is a UX/spam-reduction aid, not a security boundary - actual
+        sanitization/escaping of the stored+emailed values is handled by
+        web3forms's backend, since there is no server we control here.
+      - `subject` is set from a fixed lookup keyed by the `emne` dropdown's
+        enumerated value (never the raw select text), so a submitter still
+        can't spoof arbitrary email headers - see the script below.
+      - `botcheck` is an invisible honeypot field - real users never see
+        it, so if it's filled in the submission is a bot and is dropped.
+    */}
     <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
-    <input type="hidden" name="subject" value="Ny henvendelse fra hjemmesiden" />
+    <input type="hidden" name="subject" id="subject" value="Ny henvendelse fra hjemmesiden" />
     <input type="hidden" name="redirect" value="/kontakt/takk" />
     {/* Honeypot: leave empty, catches spam bots */}
-    <input type="checkbox" name="botcheck" class="hidden-field" tabindex="-1" autocomplete="off" />
+    <input type="checkbox" name="botcheck" class="hidden-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+    <div class="field">
+      <label for="emne">Hva gjelder henvendelsen? *</label>
+      <select id="emne" name="emne" required>
+        <option value="" disabled selected>Velg emne</option>
+        <option value="Sikkerhetskurs">Sikkerhetskurs</option>
+        <option value="Medlemskap">Medlemskap</option>
+        <option value="Banetider">Banetider / utleie av bane</option>
+        <option value="Vapensoknad">Våpensøknad</option>
+        <option value="Annet">Annet</option>
+      </select>
+    </div>
 
     <div class="field">
       <label for="name">Navn *</label>
-      <input id="name" name="name" type="text" required autocomplete="name" />
+      <input
+        id="name"
+        name="name"
+        type="text"
+        required
+        autocomplete="name"
+        maxlength="100"
+        pattern="[A-Za-zÀ-ÖØ-öø-ÿ' \-]+"
+        title="Kun bokstaver, mellomrom, bindestrek og apostrof"
+      />
     </div>
 
     <div class="field">
       <label for="email">E-post *</label>
-      <input id="email" name="email" type="email" required autocomplete="email" />
+      <input id="email" name="email" type="email" required autocomplete="email" maxlength="254" />
     </div>
 
     <div class="field">
       <label for="phone">Telefon</label>
-      <input id="phone" name="phone" type="tel" autocomplete="tel" />
+      <input
+        id="phone"
+        name="phone"
+        type="tel"
+        autocomplete="tel"
+        maxlength="20"
+        pattern="[0-9+ \-]*"
+        title="Kun tall, mellomrom, + og -"
+      />
     </div>
 
     <div class="field">
       <label for="message">Melding *</label>
-      <textarea id="message" name="message" rows="5" required></textarea>
+      <textarea id="message" name="message" rows="5" required maxlength="4000"></textarea>
     </div>
 
     <div class="field field-checkbox">
@@ -52,48 +97,23 @@ const WEB3FORMS_ACCESS_KEY = "TODO-REPLACE-WITH-YOUR-WEB3FORMS-ACCESS-KEY";
       </label>
     </div>
 
+    {/*
+      hCaptcha via Web3Forms' free, zero-config proxy - no separate
+      hCaptcha account/sitekey needed. Must also be switched to
+      "required" in the Web3Forms dashboard (Settings → Spam Protection)
+      for it to be enforced server-side; the widget alone is only a
+      client-side deterrent until that's turned on.
+    */}
+    <div class="h-captcha" data-captcha="true"></div>
+
+    <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+
     <button class="button" type="submit">Send melding</button>
   </form>
 
-  <h2>Andre måter å nå oss på</h2>
-  <p>E-post: <a href="mailto:hamarsportsskytterklubb@gmail.com">hamarsportsskytterklubb@gmail.com</a></p>
-
-  <h2>Styret</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Verv</th>
-        <th>Navn</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Leder</td>
-        <td>Jan Olav Nordhagen</td>
-      </tr>
-      <tr>
-        <td>Nestleder</td>
-        <td>Arne Vemund Bækken</td>
-      </tr>
-      <tr>
-        <td>Styremedlem</td>
-        <td>Bengt Olav Helmersen</td>
-      </tr>
-      <tr>
-        <td>Styremedlem</td>
-        <td>Tore Engemoen</td>
-      </tr>
-      <tr>
-        <td>Styremedlem</td>
-        <td>Jørn Jørgensen</td>
-      </tr>
-      <tr>
-        <td>Styremedlem</td>
-        <td>Jørn Marken</td>
-      </tr>
-    </tbody>
-  </table>
 </Layout>
+
+<script src="https://web3forms.com/client/script.js" async defer is:inline></script>
 
 <style>
   .field {
@@ -110,12 +130,15 @@ const WEB3FORMS_ACCESS_KEY = "TODO-REPLACE-WITH-YOUR-WEB3FORMS-ACCESS-KEY";
   input[type="text"],
   input[type="email"],
   input[type="tel"],
+  select,
   textarea {
     width: 100%;
     padding: 0.55rem 0.7rem;
     border: 1px solid var(--color-border);
     border-radius: 6px;
     font: inherit;
+    background: var(--color-bg);
+    color: var(--color-text);
   }
 
   .field-checkbox label {
@@ -132,4 +155,85 @@ const WEB3FORMS_ACCESS_KEY = "TODO-REPLACE-WITH-YOUR-WEB3FORMS-ACCESS-KEY";
   .hidden-field {
     display: none;
   }
+
+  .form-status {
+    margin: 0 0 1rem;
+    font-weight: 600;
+  }
+
+  .form-status[data-state="success"] {
+    color: var(--color-primary);
+  }
+
+  .form-status[data-state="error"] {
+    color: #b3261e;
+  }
 </style>
+
+<script>
+  // Progressive enhancement: submit via fetch so we can show an inline
+  // confirmation instead of a full-page redirect. Falls back to the normal
+  // POST + redirect if JavaScript is unavailable.
+  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+  const status = document.getElementById("form-status");
+  const subjectField = document.getElementById("subject") as HTMLInputElement | null;
+
+  // Fixed lookup so the email subject reflects the topic without ever
+  // using the raw <select> value/text directly (defense in depth).
+  const subjectByTopic: Record<string, string> = {
+    Sikkerhetskurs: "Ny henvendelse - Sikkerhetskurs",
+    Medlemskap: "Ny henvendelse - Medlemskap",
+    Banetider: "Ny henvendelse - Banetider/utleie",
+    Vapensoknad: "Ny henvendelse - Våpensøknad",
+    Annet: "Ny henvendelse - Annet",
+  };
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!status) return;
+
+    const topic = (form.querySelector<HTMLSelectElement>("#emne"))?.value;
+    if (subjectField && topic && subjectByTopic[topic]) {
+      subjectField.value = subjectByTopic[topic];
+    }
+
+    // hCaptcha renders a hidden textarea named "h-captcha-response" once
+    // solved. If it's empty, the widget hasn't been completed yet - block
+    // the submit instead of letting Web3Forms reject it after the fact.
+    const hCaptchaField = form.querySelector<HTMLTextAreaElement>("textarea[name='h-captcha-response']");
+    if (form.querySelector(".h-captcha") && !hCaptchaField?.value) {
+      status.textContent = "Bekreft at du ikke er en robot (hCaptcha) før du sender.";
+      status.dataset.state = "error";
+      return;
+    }
+
+    status.textContent = "Sender...";
+    status.dataset.state = "";
+
+    const submitButton = form.querySelector("button[type='submit']") as HTMLButtonElement | null;
+    submitButton?.setAttribute("disabled", "true");
+
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        status.textContent = "Takk! Meldingen din er sendt – vi svarer så snart vi kan.";
+        status.dataset.state = "success";
+        form.reset();
+      } else {
+        throw new Error(result.message || "Ukjent feil");
+      }
+    } catch (error) {
+      status.textContent = "Noe gikk galt. Prøv igjen, eller send oss en e-post direkte.";
+      status.dataset.state = "error";
+    } finally {
+      submitButton?.removeAttribute("disabled");
+    }
+  });
+</script>
+

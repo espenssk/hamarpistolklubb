@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Siden ble ikke funnet" description="Siden du leter etter finnes ikke.">
+  <section class="not-found">
+    <h1>404 – Siden finnes ikke</h1>
+    <p class="lead">
+      Beklager, vi fant ikke siden du lette etter. Den kan ha blitt flyttet
+      eller fjernet.
+    </p>
+    <a class="button" href="/">Tilbake til forsiden</a>
+  </section>
+</Layout>
+
+<style>
+  .not-found {
+    text-align: center;
+    padding-block: 3rem;
+  }
+
+  .not-found .lead {
+    margin-inline: auto;
+  }
+</style>

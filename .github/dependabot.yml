@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # Keep npm dependencies (astro, integrations, etc.) patched against
+  # newly-disclosed CVEs, since branch protection can't be enabled on a
+  # private free-plan repo to gate this any other way.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # Keep the GitHub Actions used in .github/workflows/deploy.yml patched too.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

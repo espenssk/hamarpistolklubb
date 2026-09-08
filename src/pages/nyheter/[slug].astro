@@ -14,9 +14,30 @@ const { post } = Astro.props as { post: CollectionEntry<"nyheter"> };
 const { Content } = await render(post);
 ---
 
-<Layout title={post.data.title}>
+<Layout title={post.data.title} description={post.data.summary}>
+  <p class="back-link"><a href="/nyheter">&larr; Tilbake til nyheter</a></p>
   <p class="lead">{post.data.date.toLocaleDateString("no-NO")}</p>
   <h1>{post.data.title}</h1>
   <Content />
-  <p><a href="/nyheter">&larr; Tilbake til nyheter</a></p>
 </Layout>
+
+<style>
+  .back-link {
+    margin: 0 0 1rem;
+  }
+
+  .back-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .back-link a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+</style>

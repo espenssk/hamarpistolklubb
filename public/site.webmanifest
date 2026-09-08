@@ -1,0 +1,16 @@
+{
+  "name": "Hamar Pistolklubb",
+  "short_name": "HPK",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0e7490",
+  "icons": [
+    {
+      "src": "/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

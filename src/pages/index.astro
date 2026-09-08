@@ -1,34 +1,464 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import NewsCard from "../components/NewsCard.astro";
 import { getCollection } from "astro:content";
+import { buildICS } from "../utils/ics";
+import { Image } from "astro:assets";
+import heroImage from "../assets/images/range_0.jpg";
+import heroImage2 from "../assets/images/range_3.jpg";
+import { sponsors } from "../data/sponsors";
+
+const proofPoints = [
+  { value: "2017", label: "Stiftet" },
+  { value: "NSF", label: "Tilsluttet Norges Skytterforbund" },
+  { value: "300+", label: "Medlemmer" },
+];
 
 const news = (await getCollection("nyheter"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 2);
+  .slice(0, 6);
+
+const now = new Date();
+const upcomingEvents = (await getCollection("terminliste"))
+  .filter((event) => event.data.date.valueOf() >= now.valueOf())
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())
+  .slice(0, 5);
 ---
 
-<Layout title="Hjem">
-  <section class="hero">
-    <h1>Velkommen til Hamar Pistolklubb</h1>
-    <p class="lead hero-lead">
-      Vi er en pistolklubb tilsluttet Norges Skytterforbund (NSF), med
-      innendørsbane i kjelleren på Ankerskogen svømmehall i Hamar. Nye
-      skyttere er alltid velkomne – klubben har utlånsvåpen og utstyr så du
-      kan prøve sporten før du investerer selv.
-    </p>
-    <a class="button" href="/skytebane">Se treningstider</a>
+<Layout title="Hjem" hideSponsorStrip>
+  <section class="hero" slot="hero">
+    <Image
+      src={heroImage}
+      alt=""
+      class="hero-image hero-image-a"
+      width={1600}
+      height={900}
+      loading="eager"
+      fetchpriority="high"
+    />
+    <Image
+      src={heroImage2}
+      alt=""
+      class="hero-image hero-image-b"
+      width={1600}
+      height={900}
+      loading="eager"
+    />
+    <div class="hero-content container">
+      <h1 class="brand-heading">Velkommen til Hamar Pistolklubb</h1>
+      <p class="lead">
+        Hamar Pistolklubb er stedet for deg som vil prøve pistolskyting –
+        enten du er nysgjerrig nybegynner eller erfaren
+        konkurranseutøver. Vi trener på Ankerskogen, legger vekt på trygg
+        og sikker skyteopplæring, og har et sosialt og inkluderende
+        miljø.
+      </p>
+      <a class="button" href="/kontakt">Kontakt oss</a>
+    </div>
+
+    <div class="hero-stats" aria-label="Om klubben i korte trekk">
+      <div class="hero-stats-inner container">
+        {proofPoints.map((p) => (
+          <div class="hero-stat">
+            <span class="hero-stat-value">{p.value}</span>
+            <span class="hero-stat-label">{p.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   </section>
 
-  {news.length > 0 && (
-    <section>
-      <h2>Siste nytt</h2>
-      {news.map((post) => (
-        <div class="card">
-          <h3><a href={`/nyheter/${post.id}`}>{post.data.title}</a></h3>
-          <p class="lead">{post.data.summary}</p>
+  <div class="home-layout">
+    {news.length > 0 && (
+      <section class="home-news">
+        <div class="news-grid">
+          {news.map((post, index) => (
+            <NewsCard
+              href={`/nyheter/${post.id}`}
+              title={post.data.title}
+              date={post.data.date}
+              category={post.data.category}
+              image={post.data.image}
+              featured={index === 0}
+            />
+          ))}
+          <a class="news-card news-card-viewall" href="/nyheter">
+            <span class="news-card-viewall-media" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14" />
+                <path d="m13 6 6 6-6 6" />
+              </svg>
+            </span>
+            <span class="news-card-viewall-label">Se alle nyheter</span>
+          </a>
         </div>
-      ))}
-    </section>
-  )}
+      </section>
+    )}
+
+    <div class="home-side">
+      <section class="home-sponsors" aria-labelledby="home-sponsors-heading">
+        <h2 id="home-sponsors-heading">Samarbeidspartnere</h2>
+        <div class="home-sponsors-grid">
+          {sponsors.map((s) => (
+            <a href={s.href} target="_blank" rel="noopener" title={s.name}>
+              {s.image ? <Image src={s.image} alt={s.name} width={160} /> : s.name}
+              <span class="sr-only"> (åpnes i ny fane)</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <aside class="home-events" aria-labelledby="events-heading">
+        <h2 id="events-heading">Kommende arrangementer</h2>
+        {upcomingEvents.length > 0 ? (
+          <ul class="event-list">
+            {upcomingEvents.map((event) => (
+              <li class="event-item">
+                <div class="event-date">
+                  <span class="event-day">{event.data.date.toLocaleDateString("no-NO", { day: "numeric" })}</span>
+                  <span class="event-month">{event.data.date.toLocaleDateString("no-NO", { month: "short" })}</span>
+                </div>
+                <div class="event-body">
+                  <p class="event-title">{event.data.title}</p>
+                  {event.data.location && <p class="event-location">{event.data.location}</p>}
+                  <a class="ics-link" href={buildICS(event)} download={`${event.id}.ics`}>
+                    + Kalender
+                  </a>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="lead" style="flex: 1;">Ingen planlagte arrangementer akkurat nå.</p>
+        )}
+        <a class="button" href="/terminliste">Se hele terminlisten</a>
+      </aside>
+    </div>
+  </div>
 </Layout>
+
+<style>
+  .brand-heading {
+    font-weight: 700;
+  }
+
+  /* Photo-led hero: background photo with a dark gradient so the white
+     heading/lead text stays readable regardless of the photo's content.
+     Full-bleed (rendered via the Layout's "hero" slot, outside .container)
+     so the photo spans the entire viewport width. */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: clamp(298px, 36vw, 438px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .hero :global(.hero-image) {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Two photos slowly cross-fade so the hero feels alive rather than a
+     single static shot. animation-delay is negative so both photos are
+     already mid-cycle (in opposite phase) as soon as the page loads. */
+  .hero :global(.hero-image-a) {
+    animation: hero-crossfade 14s ease-in-out infinite;
+  }
+
+  .hero :global(.hero-image-b) {
+    animation: hero-crossfade 14s ease-in-out infinite;
+    animation-delay: -7s;
+  }
+
+  @keyframes hero-crossfade {
+    0%, 40% { opacity: 1; }
+    50%, 90% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero :global(.hero-image) {
+      animation: none;
+    }
+
+    .hero :global(.hero-image-a) {
+      opacity: 1;
+    }
+
+    .hero :global(.hero-image-b) {
+      opacity: 0;
+    }
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      180deg,
+      rgba(30, 18, 4, 0.55) 0%,
+      rgba(35, 22, 6, 0.82) 100%
+    );
+  }
+
+  .hero-content {
+    padding-block: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 3vw, 2rem);
+    color: #fff;
+  }
+
+  /* Guarantees readability against busy photo detail regardless of the
+     gradient alone (e.g. lighter areas of the cross-fading photos). */
+  .hero-content h1,
+  .hero-content .lead {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75), 0 2px 10px rgba(0, 0, 0, 0.55);
+  }
+
+  .hero-content .lead {
+    max-width: 640px;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  /* Quick-facts band anchored to the bottom edge of the hero photo. */
+  .hero-stats {
+    position: relative;
+    background: rgba(8, 14, 28, 0.55);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  /* Thin blue/gold accent referencing the club's older logo colors. */
+  .hero-stats::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--color-accent-blue),
+      var(--color-accent-gold)
+    );
+  }
+
+  .hero-stats-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1rem, 3vw, 2rem);
+    padding-block: clamp(0.6rem, 1.5vw, 0.9rem);
+  }
+
+  .hero-stat {
+    flex: 1 1 140px;
+    text-align: center;
+  }
+
+  .hero-stat-value {
+    display: block;
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .hero-stat-label {
+    display: block;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .home-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(240px, 1fr);
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    align-items: start;
+    /* main already adds 2.5rem of top padding, matching every other page's
+       gap before its h1 - no extra margin needed here on top of that. */
+  }
+
+  .home-news {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-news .button,
+  .home-events .button {
+    margin-top: 1.25rem;
+  }
+
+  /* "View all" tile: same footprint as a regular news-card so it reads as
+     part of the grid rather than a separate button below it. */
+  .news-card-viewall {
+    align-items: center;
+    text-decoration: none;
+    color: var(--color-text);
+  }
+
+  .news-card-viewall-media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-primary);
+  }
+
+  .news-card-viewall-media svg {
+    width: clamp(1.75rem, 5vw, 2.5rem);
+    height: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .news-card-viewall-label {
+    margin: 0.8rem 0.9rem 0.9rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-align: center;
+  }
+
+  .home-side {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 3vw, 1.75rem);
+  }
+
+  .home-sponsors {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+  }
+
+  .home-sponsors h2 {
+    margin: 0 0 0.9rem;
+    /* Tighten line-height so the vertical gap above the heading's cap
+       height roughly matches the box's horizontal padding, instead of
+       inheriting body's much taller line-height as unused leading. */
+    line-height: 1.1;
+  }
+
+  .home-sponsors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(0.6rem, 1.8vw, 1rem);
+  }
+
+  .home-sponsors-grid a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 1 1 140px;
+    height: 44px;
+  }
+
+  .home-sponsors-grid :global(img) {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .home-events {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+  }
+
+  .home-events h2 {
+    margin-top: 0;
+    line-height: 1.1;
+  }
+
+  .event-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .home-events .button {
+    margin-top: auto;
+  }
+
+  .event-item {
+    display: flex;
+    gap: 0;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+  }
+
+  .event-date {
+    flex-shrink: 0;
+    width: 3rem;
+    text-align: left;
+    line-height: 1.1;
+  }
+
+  .event-day {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .event-month {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .event-body {
+    margin-left: -0.1rem;
+  }
+
+  .event-title {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .event-location {
+    margin: 0.15rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  .ics-link {
+    display: inline-block;
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 860px) {
+    .home-layout {
+      grid-template-columns: 1fr;
+    }
+
+    /* When the sidebar drops below the news column, .home-news suddenly
+       gets much wider (no more sidebar sharing the row). Without this,
+       the news grid would briefly jump to 3 columns right at this
+       breakpoint before shrinking back down as the viewport narrows
+       further. Raising the min track size here keeps it capped at the
+       same 2 columns it had just above the breakpoint. */
+    .home-news .news-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+  }
+</style>
 

@@ -1,0 +1,78 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
+import rangeImage from "../assets/images/range_3.jpg";
+
+const board = [
+  { role: "Leder", name: "Jan Olav Nordhagen" },
+  { role: "Nestleder", name: "Arne Vemund Bækken" },
+  { role: "Styremedlem", name: "Bengt Olav Helmersen" },
+  { role: "Styremedlem", name: "Tore Engemoen" },
+  { role: "Styremedlem", name: "Jørn Jørgensen" },
+  { role: "Styremedlem", name: "Jørn Marken" },
+];
+---
+
+<Layout title="Om klubben" description="Om Hamar Pistolklubb – historie og styret.">
+  <h1>Om klubben</h1>
+  <div class="lead-row">
+    <p class="lead">
+      Hamar Pistolklubb ble stiftet i 2017, og er tilsluttet Norges
+      Skytterforbund (NSF). Klubben har siden oppstarten holdt til med
+      innendørsbane i kjelleren på Ankerskogen svømmehall i Hamar, hvor
+      medlemmene trener og konkurrerer i pistolskyting gjennom hele
+      innesesongen. Vi legger vekt på trygg og sikker skyteopplæring for
+      nye medlemmer, og ønsker alle som er nysgjerrige på sporten velkommen
+      til å ta kontakt.
+    </p>
+    <Image class="lead-image" src={rangeImage} alt="Skytebanen til Hamar Pistolklubb" width={480} />
+  </div>
+
+  <h2>Styret</h2>
+  <table>
+    <caption class="sr-only">Styremedlemmer i Hamar Pistolklubb</caption>
+    <thead>
+      <tr>
+        <th>Verv</th>
+        <th>Navn</th>
+      </tr>
+    </thead>
+    <tbody>
+      {board.map((member) => (
+        <tr>
+          <td>{member.role}</td>
+          <td>{member.name}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</Layout>
+
+<style>
+  .lead-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .lead-row .lead {
+    flex: 1 1 320px;
+  }
+
+  .lead-image {
+    flex: 1 1 260px;
+    max-width: 480px;
+    width: 100%;
+    height: auto;
+    margin-top: -2rem;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    /* Frame referencing the same blue/gold accent used on the hero. */
+    border: 3px solid transparent;
+    background:
+      linear-gradient(#fff, #fff) padding-box,
+      linear-gradient(135deg, var(--color-accent-blue), var(--color-accent-gold)) border-box;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  }
+</style>

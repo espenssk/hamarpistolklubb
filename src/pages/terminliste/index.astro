@@ -1,43 +1,122 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import { buildICS } from "../../utils/ics";
 
 const events = (await getCollection("terminliste")).sort(
   (a, b) => a.data.date.valueOf() - b.data.date.valueOf()
 );
 ---
 
-<Layout title="Terminliste">
+<Layout title="Terminliste" description="Terminliste for klubbarrangementer og lenke til NSFs offisielle terminliste for pistolstevner.">
   <h1>Terminliste</h1>
   <p class="lead">
     Norges Skytterforbunds terminliste viser alle approberte pistolstevner
     i Norge:
     <a href="https://www.skyting.no/pistol/terminliste-pistol-2/" target="_blank" rel="noopener">
-      Se terminliste hos NSF
+      Se terminliste hos NSF<span class="sr-only"> (åpnes i ny fane)</span>
     </a>
   </p>
 
   {events.length > 0 && (
     <>
       <h2>Klubbarrangementer</h2>
-      <table>
+
+      <div class="field">
+        <label for="event-search">Søk i klubbarrangementer</label>
+        <input
+          id="event-search"
+          type="search"
+          placeholder="Søk på navn eller sted…"
+          autocomplete="off"
+        />
+      </div>
+
+      <table id="events-table">
         <thead>
           <tr>
             <th>Dato</th>
             <th>Arrangement</th>
             <th>Sted</th>
+            <th><span class="sr-only">Kalender</span></th>
           </tr>
         </thead>
         <tbody>
           {events.map((event) => (
-            <tr>
+            <tr data-search={`${event.data.title} ${event.data.location ?? ""}`.toLowerCase()}>
               <td>{event.data.date.toLocaleDateString("no-NO")}</td>
               <td>{event.data.title}</td>
               <td>{event.data.location ?? "—"}</td>
+              <td>
+                <a
+                  class="ics-link"
+                  href={buildICS(event)}
+                  download={`${event.id}.ics`}
+                >
+                  + Kalender
+                </a>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <p class="lead" id="no-results" hidden>Ingen arrangementer matcher søket.</p>
+      <p class="sr-only" id="search-status" role="status" aria-live="polite"></p>
     </>
   )}
 </Layout>
+
+<style>
+  .field {
+    margin-bottom: 1rem;
+    max-width: 24rem;
+  }
+
+  .field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+  }
+
+  #event-search {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font: inherit;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .ics-link {
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+</style>
+
+<script>
+  const input = document.getElementById("event-search") as HTMLInputElement | null;
+  const rows = Array.from(document.querySelectorAll<HTMLTableRowElement>("#events-table tbody tr"));
+  const noResults = document.getElementById("no-results");
+  const searchStatus = document.getElementById("search-status");
+
+  input?.addEventListener("input", () => {
+    const query = input.value.trim().toLowerCase();
+    let visibleCount = 0;
+
+    for (const row of rows) {
+      const matches = !query || (row.dataset.search ?? "").includes(query);
+      row.hidden = !matches;
+      if (matches) visibleCount += 1;
+    }
+
+    if (noResults) noResults.hidden = visibleCount !== 0;
+    if (searchStatus) {
+      searchStatus.textContent = query
+        ? `${visibleCount} ${visibleCount === 1 ? "arrangement" : "arrangementer"} funnet.`
+        : "";
+    }
+  });
+</script>
+

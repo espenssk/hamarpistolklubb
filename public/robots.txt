@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hamarpistolklubb.no/sitemap-index.xml

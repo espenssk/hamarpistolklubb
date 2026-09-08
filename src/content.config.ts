@@ -3,11 +3,16 @@ import { glob } from "astro/loaders";
 
 const nyheter = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/nyheter" }),
-  schema: z.object({
-    title: z.string(),
-    date: z.date(),
-    summary: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      date: z.date(),
+      summary: z.string().optional(),
+      // Optional illustration shown on the news cards (homepage + /nyheter).
+      image: image().optional(),
+      // Short tag shown as a pill on the card, e.g. "Årsmøte", "Vaktliste".
+      category: z.string().optional(),
+    }),
 });
 
 const terminliste = defineCollection({

@@ -1,0 +1,113 @@
+---
+// Narrow, continuously auto-scrolling band of sponsor logos — a compact,
+// "always moving" alternative to a full photo carousel. The logo list is
+// duplicated so the CSS animation loops seamlessly; it pauses on hover/focus
+// and falls back to a static row when the user prefers reduced motion.
+import { Image } from "astro:assets";
+import { sponsors } from "../data/sponsors";
+---
+
+{/* Repeat the list several times so the strip stays visually full and the
+    loop point isn't noticeable even with only a handful of sponsors. */}
+<div class="sponsor-ticker">
+  <div class="sponsor-ticker-inner container" role="region" aria-label="Samarbeidspartnere">
+    <div class="sponsor-ticker-track">
+      {[...sponsors, ...sponsors, ...sponsors, ...sponsors].map((s, i) => (
+        <a href={s.href} target="_blank" rel="noopener" tabindex={i < sponsors.length ? 0 : -1} aria-hidden={i < sponsors.length ? undefined : "true"}>
+          <Image src={s.image} alt={s.name} width={160} />
+          <span class="sponsor-ticker-info" aria-hidden="true">{s.name}</span>
+          <span class="sr-only"> (åpnes i ny fane)</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .sponsor-ticker {
+    border-block: 1px solid var(--color-border);
+    background: var(--color-surface);
+    padding-block: clamp(0.6rem, 2vw, 0.9rem);
+  }
+
+  .sponsor-ticker-inner {
+    overflow: hidden;
+    /* Soft fade at the edges instead of an abrupt clip where the logos
+       disappear behind the container boundary. */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+
+  .sponsor-ticker-track {
+    display: flex;
+    align-items: center;
+    gap: clamp(2rem, 6vw, 3.5rem);
+    width: max-content;
+    animation: sponsor-scroll 56s linear infinite;
+  }
+
+  .sponsor-ticker:hover .sponsor-ticker-track,
+  .sponsor-ticker:focus-within .sponsor-ticker-track {
+    animation-play-state: paused;
+  }
+
+  .sponsor-ticker-track a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: clamp(36px, 6vw, 48px);
+    flex-shrink: 0;
+  }
+
+  .sponsor-ticker-track img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .sponsor-ticker-info {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.72);
+    border-radius: var(--radius);
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+  }
+
+  .sponsor-ticker-track a:hover .sponsor-ticker-info,
+  .sponsor-ticker-track a:focus-visible .sponsor-ticker-info {
+    opacity: 1;
+  }
+
+  @keyframes sponsor-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sponsor-ticker-track {
+      animation: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .sponsor-ticker-track a[aria-hidden="true"] {
+      display: none;
+    }
+  }
+</style>
