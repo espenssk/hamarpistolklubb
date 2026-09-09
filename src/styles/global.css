@@ -640,6 +640,17 @@ th {
   object-fit: contain;
 }
 
+@media (max-width: 520px) {
+  .sponsor-logos {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .sponsor-logos a {
+    width: min(220px, 100%);
+  }
+}
+
 /* Footer */
 .site-footer {
   border-top: 1px solid var(--color-border);
