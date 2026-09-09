@@ -282,6 +282,10 @@ a {
 }
 
 @media (max-width: 720px) {
+  .header-inner {
+    padding-block-end: calc(clamp(0.75rem, 2vw, 1.1rem) + 0.25rem);
+  }
+
   .nav-toggle {
     display: inline-flex;
     position: absolute;
