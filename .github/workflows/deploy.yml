@@ -28,6 +28,12 @@ jobs:
         uses: withastro/action@e84f40bd8d2caa9e768ec82ad30dd81f0b280853 # v6.1.2
         with:
           node-version: "22"
+        env:
+          # TODO: remove SITE_URL/BASE_PATH once testing moves off the GitHub
+          # Pages project URL (espenssk.github.io/hps-homepage/) and onto the
+          # custom domain, which is served from "/" and needs no base path.
+          SITE_URL: https://espenssk.github.io
+          BASE_PATH: /hps-homepage/
 
   deploy:
     needs: build
