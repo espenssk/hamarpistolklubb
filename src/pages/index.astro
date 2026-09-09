@@ -271,8 +271,12 @@ const upcomingEvents = (await getCollection("terminliste"))
   }
 
   .hero-stat-label {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.4em;
     font-size: 0.78rem;
+    line-height: 1.2;
     color: rgba(255, 255, 255, 0.75);
   }
 
