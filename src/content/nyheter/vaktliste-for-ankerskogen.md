@@ -6,4 +6,4 @@ image: "../../assets/images/innendorsbane.png"
 category: "Vaktliste"
 ---
 
-[Vaktlista for vinter-/vårsesongen 2022 er lagt ut her.](https://www.hamarsportsskytterklubb.no/ankerskogen-hamar/)
+[Vaktlista for vinter-/vårsesongen 2022 er lagt ut her.](/documents/2022-vaktliste-vaar.pdf)

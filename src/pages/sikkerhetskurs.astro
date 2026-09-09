@@ -28,13 +28,18 @@ const withBase = (path: string) => base + path.replace(/^\//, "");
     For påmelding til sikkerhetskurs, ta kontakt med Arne Vemund Bækken (nestleder) eller Jan Olav Nordhagen
     (leder) via <a href={withBase("/kontakt")}>kontaktsiden</a>.
   </p>
+  <p>
+    <a href={withBase("/documents/hamar-pk-pamelding-kurs.docx")}>
+      Påmeldingsskjema for sikkerhetskurs (DOCX)
+    </a>
+  </p>
 
   <h2>Etter kurset</h2>
   <p class="lead">
     I starten trenger du ikke kjøpe noe selv – klubben har utlånsvåpen og
     hørselsvern/briller så du kan prøve sporten før du investerer selv.
-    Når du senere ønsker å søke om eget våpen, se
-    <a href={withBase("/vapensoknad")}>våpensøknad</a> for hva som kreves.
+    Når du senere ønsker å søke om eget våpen,
+    se <a href={withBase("/vapensoknad")}>våpensøknad</a> for hva som kreves.
   </p>
 </Layout>
 

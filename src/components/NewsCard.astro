@@ -9,12 +9,14 @@ interface Props {
   date: Date;
   category?: string;
   image?: ImageMetadata;
+  /** "contain" shows the whole image letterboxed instead of cropping it. */
+  imageFit?: "cover" | "contain";
   /** Renders larger, spanning the full grid width - used for the single
    * most recent article so it's the first thing readers' eyes land on. */
   featured?: boolean;
 }
 
-const { href, title, date, category, image, featured = false } = Astro.props;
+const { href, title, date, category, image, imageFit = "cover", featured = false } = Astro.props;
 
 // Simple line-icon placeholders per category, used until real photos are
 // added. Falls back to a newspaper icon for uncategorised posts.
@@ -33,7 +35,7 @@ const icon = ICONS[slug] ?? DEFAULT_ICON;
 ---
 
 <article class:list={["news-card", { "news-card-featured": featured }]}>
-  <a href={href} class="news-card-media">
+  <a href={href} class="news-card-media" data-fit={imageFit}>
     {image ? (
       <Image src={image} alt="" width={featured ? 960 : 640} />
     ) : (

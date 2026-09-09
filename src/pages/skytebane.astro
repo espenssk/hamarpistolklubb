@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Carousel from "../components/Carousel.astro";
-import electronicTarget1 from "../assets/images/electronic_target_1.jpg";
+import electronicTargetCrop from "../assets/images/electronic_target_crop.jpg";
 import indoorsRange2 from "../assets/images/indoors_range_2.jpeg";
 import indoorsRange3 from "../assets/images/indoors_range_3.jpeg";
 
@@ -12,7 +12,8 @@ const times = [
 
 const slides = [
   { image: indoorsRange2, alt: "Innendørsbanen på Ankerskogen" },
-  { image: electronicTarget1, alt: "Elektroniske skiver på standplass" },
+  // Near-square crop: show the whole frame instead of cropping it further.
+  { image: electronicTargetCrop, alt: "Elektroniske skiver på standplass", fit: "contain" as const },
   { image: indoorsRange3, alt: "Innendørsbanen på Ankerskogen" },
 ];
 ---
@@ -49,7 +50,7 @@ const slides = [
 
   <div class="split">
     <div class="split-carousel">
-      <Carousel slides={slides} />
+      <Carousel slides={slides} ratio="4 / 3" sizes="(max-width: 720px) 100vw, 472px" />
     </div>
     <div class="map-embed">
       <iframe

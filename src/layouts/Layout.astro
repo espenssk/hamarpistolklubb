@@ -39,6 +39,11 @@ const membershipMenu = [
   { href: "/vapensoknad", label: "Våpensøknad" },
 ];
 
+const aboutMenu = [
+  { href: "/om-klubben", label: "Om klubben" },
+  { href: "/styreinfo", label: "Styreinfo" },
+];
+
 const currentPath = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = new URL(withBase(ogImage), Astro.site);
@@ -145,10 +150,31 @@ const ogImageURL = new URL(withBase(ogImage), Astro.site);
                 Kontakt
               </a>
             </li>
-            <li>
-              <a href={withBase("/om-klubben")} aria-current={currentPath === withBase("/om-klubben") ? "page" : undefined}>
+            <li class="nav-dropdown">
+              <button
+                class="nav-dropdown-toggle"
+                type="button"
+                id="about-menu-toggle"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="about-menu"
+                aria-current={aboutMenu.some((item) => withBase(item.href) === currentPath) ? "page" : undefined}
+              >
                 Om oss
-              </a>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <ul class="nav-dropdown-menu" id="about-menu" aria-labelledby="about-menu-toggle">
+                {aboutMenu.map((item) => (
+                  <li>
+                    <a
+                      href={withBase(item.href)}
+                      aria-current={currentPath === withBase(item.href) ? "page" : undefined}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </li>
             <li>
               <button
@@ -191,7 +217,10 @@ const ogImageURL = new URL(withBase(ogImage), Astro.site);
     <footer class="site-footer">
       <div class="container">
         <span>&copy; {new Date().getFullYear()} Hamar Pistolklubb</span>
-        <span>
+        <a href="https://www.facebook.com/groups/423546947796062" target="_blank" rel="noopener">
+          Facebook<span class="sr-only"> (åpnes i ny fane)</span>
+        </a>
+        <span class="footer-links">
           <a href={withBase("/kontakt")}>Kontakt oss</a>
         </span>
       </div>
@@ -220,19 +249,27 @@ const ogImageURL = new URL(withBase(ogImage), Astro.site);
     </div>
 
     <script>
-      const toggle = document.getElementById("nav-toggle");
-      const nav = document.getElementById("primary-nav");
+      // ClientRouter swaps the header on navigation, so the button must be
+      // re-bound each time - the dataset flag stops double-binding.
+      function initNavToggle() {
+        const toggle = document.getElementById("nav-toggle");
+        const nav = document.getElementById("primary-nav");
+        if (!toggle || !nav) return;
 
-      toggle?.addEventListener("click", () => {
-        const isOpen = nav?.classList.toggle("is-open");
-        toggle.setAttribute("aria-expanded", String(Boolean(isOpen)));
-      });
+        nav.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
 
-      // Close the mobile menu whenever Astro's client-side router swaps pages.
-      document.addEventListener("astro:page-load", () => {
-        nav?.classList.remove("is-open");
-        toggle?.setAttribute("aria-expanded", "false");
-      });
+        if (toggle.dataset.bound === "true") return;
+        toggle.dataset.bound = "true";
+
+        toggle.addEventListener("click", () => {
+          const isOpen = nav.classList.toggle("is-open");
+          toggle.setAttribute("aria-expanded", String(isOpen));
+        });
+      }
+
+      initNavToggle();
+      document.addEventListener("astro:page-load", initNavToggle);
     </script>
 
     <script>
@@ -273,6 +310,11 @@ const ogImageURL = new URL(withBase(ogImage), Astro.site);
       }
 
       initDropdown("membership-menu-toggle", "membership-menu");
+      initDropdown("about-menu-toggle", "about-menu");
+      document.addEventListener("astro:page-load", () => {
+        initDropdown("membership-menu-toggle", "membership-menu");
+        initDropdown("about-menu-toggle", "about-menu");
+      });
     </script>
 
     <script>

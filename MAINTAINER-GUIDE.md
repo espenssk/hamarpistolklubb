@@ -65,6 +65,14 @@ til en `image`-linje i toppen av filen:
 image: "../../assets/images/mitt-bilde.jpg"
 ```
 
+Bildet beskjæres som standard til et 4:3-utsnitt. Er bildet veldig bredt
+eller smalt - for eksempel en logo - og du vil vise det i sin helhet,
+legger du til:
+
+```yaml
+imageFit: "contain"
+```
+
 ## Legge til et arrangement i terminlisten
 
 Mappe: `src/content/terminliste/`

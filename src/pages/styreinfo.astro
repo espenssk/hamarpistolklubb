@@ -1,0 +1,88 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const base = import.meta.env.BASE_URL;
+const withBase = (path: string) => base + path.replace(/^\//, "");
+
+const arsmote = [
+  { date: "2026-02-19", label: "Protokoll fra årsmøtet", file: "/documents/2026-02-19-aarsmote-Protokoll-signert.pdf" },
+  { date: "2026-02-19", label: "Årsregnskap", file: "/documents/2026-02-19-aars-regnskap.pdf" },
+  { date: "2026-02-19", label: "Saksdokumenter til årsmøtet", file: "/documents/2026-02-19-aarsmote-saksdokumenter.pdf" },
+  { date: "2022-02-17", label: "Protokoll fra årsmøtet", file: "/documents/styredok-2022-02-17-arsmote-protokoll.pdf" },
+  { date: "2021-05-06", label: "Protokoll fra årsmøtet", file: "/documents/styredok-2021-05-06-arsmote-protokoll.pdf" },
+];
+
+const styremoter = [
+  { date: "2025-08-20", file: "/documents/styredok-2025-08-20-styremote.pdf" },
+  { date: "2025-03-18", file: "/documents/styredok-2025-03-18-styremote.pdf" },
+  { date: "2024-10-10", file: "/documents/styredok-2024-10-10-styremote.pdf" },
+  { date: "2024-04-16", file: "/documents/styredok-2024-04-16-styremote.pdf" },
+  { date: "2023-11-29", file: "/documents/styredok-2023-11-29-styremote.pdf" },
+  { date: "2023-08-03", file: "/documents/styredok-2023-08-03-styremote.pdf" },
+  { date: "2022-05-19", file: "/documents/styredok-2022-05-19-styremote.pdf" },
+  { date: "2021-06-15", file: "/documents/styredok-2021-06-15-styremote.pdf" },
+];
+
+const lover = [
+  { label: "Lovnorm for Hamar Pistolklubb (vedtatt 2026)", file: "/documents/lovnorm-for-Hamar-Pistolklubb.pdf" },
+  { label: "Lovnorm for Hamar Sportsskytterklubb (2017)", file: "/documents/styredok-2017-hsk-lovnorm.pdf" },
+  { label: "Mal for forslag til årsmøtet", file: "/documents/styredok-2021-01-29-mal-forslag-arsmote.pdf" },
+];
+---
+
+<Layout title="Styreinfo" description="Referater fra styremøter, årsmøteprotokoller og klubbens lover i Hamar Pistolklubb.">
+  <h1>Styreinfo</h1>
+  <p class="lead">
+    Her finner du referater fra styremøter, protokoller fra årsmøtene og
+    klubbens lover. Alle dokumentene er PDF-filer.
+  </p>
+
+  <h2>Årsmøter</h2>
+  <ul class="doc-list">
+    {arsmote.map((doc) => (
+      <li>
+        <a href={withBase(doc.file)}>{doc.date} – {doc.label}</a>
+      </li>
+    ))}
+  </ul>
+
+  <h2>Referater fra styremøter</h2>
+  <ul class="doc-list">
+    {styremoter.map((doc) => (
+      <li>
+        <a href={withBase(doc.file)}>{doc.date} – Referat fra styremøte</a>
+      </li>
+    ))}
+  </ul>
+
+  <h2>Klubbens lover</h2>
+  <ul class="doc-list">
+    {lover.map((doc) => (
+      <li>
+        <a href={withBase(doc.file)}>{doc.label}</a>
+      </li>
+    ))}
+  </ul>
+
+  <p>
+    Har du en sak du ønsker at styret skal behandle?
+    Ta kontakt via <a href={withBase("/kontakt")}>kontaktsiden</a>.
+  </p>
+</Layout>
+
+<style>
+  .doc-list {
+    list-style: none;
+    padding: 0;
+    margin-block: 1rem;
+  }
+
+  .doc-list li + li {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .doc-list a {
+    display: block;
+    padding: 0.6rem 0;
+  }
+</style>

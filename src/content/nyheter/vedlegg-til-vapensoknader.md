@@ -7,4 +7,4 @@ category: "Info"
 
 Skal du søke om våpen, skal det følge med en uttalelse fra klubben.
 
-[Les mer om dette her](https://www.hamarsportsskytterklubb.no/vapensoknader/)
+[Les mer om dette her](/vapensoknad)

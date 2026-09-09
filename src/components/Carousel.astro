@@ -1,5 +1,5 @@
 ---
-// A lightweight, dependency-free image carousel: wide, short aspect ratio,
+// A lightweight, dependency-free image carousel: fixed aspect-ratio viewport,
 // autoplay with pause-on-hover/focus, prev/next buttons, and dot navigation.
 // Pass real images (ImageMetadata) or omit `image` to render a placeholder
 // slide (useful until real photos are supplied).
@@ -8,21 +8,42 @@ import { Image } from "astro:assets";
 interface Slide {
   image?: ImageMetadata;
   alt: string;
+  // "contain" shows the whole frame (use for portrait shots); "cover" crops to fill.
+  fit?: "cover" | "contain";
+  // Focal point used when the slide is cropped, e.g. "center 30%".
+  position?: string;
 }
 
 interface Props {
   slides: Slide[];
+  // Aspect ratio of the carousel viewport, e.g. "4 / 3" or "16 / 9".
+  ratio?: string;
+  // Rendered width of the carousel, used to pick the right image size.
+  sizes?: string;
 }
 
-const { slides } = Astro.props;
+const { slides, ratio = "16 / 9", sizes = "(max-width: 720px) 100vw, 50vw" } = Astro.props;
 ---
 
-<section class="carousel" aria-roledescription="karusell" aria-label="Bilder fra klubben">
+<section
+  class="carousel"
+  style={`--carousel-ratio: ${ratio};`}
+  aria-roledescription="karusell"
+  aria-label="Bilder fra klubben"
+>
   <div class="carousel-track" id="carousel-track">
     {slides.map((slide) => (
-      <figure class="carousel-slide">
+      <figure
+        class="carousel-slide"
+        style={`--slide-fit: ${slide.fit ?? "cover"}; --slide-position: ${slide.position ?? "center"};`}
+      >
         {slide.image ? (
-          <Image src={slide.image} alt={slide.alt} width={1600} height={420} />
+          <Image
+            src={slide.image}
+            alt={slide.alt}
+            widths={[400, 640, 960, 1280, 1536]}
+            sizes={sizes}
+          />
         ) : (
           <div class="carousel-placeholder">{slide.alt}</div>
         )}
@@ -55,7 +76,7 @@ const { slides } = Astro.props;
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: clamp(180px, 26vw, 320px);
+    aspect-ratio: var(--carousel-ratio, 16 / 9);
     background: var(--color-surface);
   }
 
@@ -74,7 +95,8 @@ const { slides } = Astro.props;
   .carousel-slide :global(img) {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: var(--slide-fit, cover);
+    object-position: var(--slide-position, center);
     display: block;
   }
 

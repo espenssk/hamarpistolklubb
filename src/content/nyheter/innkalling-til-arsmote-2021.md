@@ -24,5 +24,5 @@ Styret
 
 Vedlegg:
 
-- [Mal for forslag til årsmøtet](http://www.hamarsportsskytterklubb.no/wp-content/uploads/2021/01/styredok-2021-01-29-mal-forslag-arsmote.pdf)
-- [Hamar Sportsskytterklubb – Lovnorm](http://www.hamarsportsskytterklubb.no/wp-content/uploads/2021/01/styredok-2017-hsk-lovnorm.pdf)
+- [Mal for forslag til årsmøtet](/documents/styredok-2021-01-29-mal-forslag-arsmote.pdf)
+- [Hamar Sportsskytterklubb – Lovnorm](/documents/styredok-2017-hsk-lovnorm.pdf)

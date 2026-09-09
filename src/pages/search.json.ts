@@ -54,7 +54,12 @@ const staticPages = [
   {
     url: withBase("/om-klubben"),
     title: "Om klubben",
-    text: "om klubben historie stiftet 1954 Hamar Idrettslag 2017 nytt navn styret leder nestleder styremedlem",
+    text: "om klubben historie stiftet 1954 Hamar Idrettslag 2017 nytt navn styret leder nestleder kasserer styremedlem varamedlem",
+  },
+  {
+    url: withBase("/styreinfo"),
+    title: "Styreinfo",
+    text: "styreinfo referat fra styremøte årsmøte protokoll årsregnskap saksdokumenter lovnorm klubbens lover dokumenter",
   },
   {
     url: withBase("/nyheter"),

@@ -25,10 +25,16 @@ const withBase = (path: string) => base + path.replace(/^\//, "");
   <p>
     Skal du søke om våpen, skal det følge med en uttalelse fra klubben.
     Ta kontakt med styret via <a href={withBase("/kontakt")}>kontaktsiden</a> for å få
-    tilsendt vedlegget til søknaden.
+    vedlegget utfylt og signert.
   </p>
   <p>
-    <a href="https://www.hamarsportsskytterklubb.no/vapensoknader/">Les mer om våpensøknader hos NSF</a>
+    <a href={withBase("/documents/2022-v2-uttalelse-fra-skytterlag-skytterklubb.pdf")}>
+      Uttalelse fra skytterlag/skytterklubb (PDF)
+    </a>
+  </p>
+  <p>
+    Når du søker digitalt hos politiet, må den utfylte og signerte uttalelsen
+    lastes opp som vedlegg til søknaden.
   </p>
 
   <h2>Våpenlover og -regler</h2>

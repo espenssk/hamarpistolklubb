@@ -10,6 +10,9 @@ const nyheter = defineCollection({
       summary: z.string().optional(),
       // Optional illustration shown on the news cards (homepage + /nyheter).
       image: image().optional(),
+      // "contain" shows the whole image letterboxed instead of cropping it
+      // to the card's 4:3 frame - use for wide graphics like the logo.
+      imageFit: z.enum(["cover", "contain"]).optional(),
       // Short tag shown as a pill on the card, e.g. "Årsmøte", "Vaktliste".
       category: z.string().optional(),
     }),

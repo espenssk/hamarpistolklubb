@@ -84,6 +84,7 @@ const upcomingEvents = (await getCollection("terminliste"))
               date={post.data.date}
               category={post.data.category}
               image={post.data.image}
+              imageFit={post.data.imageFit}
               featured={index === 0}
             />
           ))}
@@ -138,6 +139,20 @@ const upcomingEvents = (await getCollection("terminliste"))
         )}
         <a class="button" href={withBase("/terminliste")}>Se hele terminlisten</a>
       </aside>
+
+      <section class="home-social" aria-labelledby="home-social-heading">
+        <h2 id="home-social-heading">Følg oss</h2>
+        <p>Vaktlister, bilder og kortere beskjeder legges ut i Facebook-gruppa vår.</p>
+        <a
+          class="home-social-link"
+          href="https://www.facebook.com/groups/423546947796062"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h-3a4 4 0 0 0-4 4v3H5v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          Facebook<span class="sr-only"> (åpnes i ny fane)</span>
+        </a>
+      </section>
     </div>
   </div>
 </Layout>
@@ -377,6 +392,46 @@ const upcomingEvents = (await getCollection("terminliste"))
     border-radius: var(--radius);
     background: var(--color-surface);
     padding: clamp(1rem, 2.5vw, 1.5rem);
+  }
+
+  .home-social {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+  }
+
+  .home-social h2 {
+    margin: 0 0 0.5rem;
+    line-height: 1.1;
+  }
+
+  .home-social p {
+    margin: 0 0 0.9rem;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  .home-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .home-social-link:hover {
+    border-color: var(--color-primary);
+  }
+
+  .home-social-link svg {
+    width: 1.15em;
+    height: 1.15em;
   }
 
   .home-events h2 {

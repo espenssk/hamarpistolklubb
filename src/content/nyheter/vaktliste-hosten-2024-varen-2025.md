@@ -7,4 +7,4 @@ category: "Vaktliste"
 
 Innesesongen i Ankerskogen starter opp litt ut i september. Her finner dere:
 
-[Oppdatert vaktliste for innesesongen 2024-2025](http://www.hamarsportsskytterklubb.no/wp-content/uploads/2023/09/2024-2025-vaktliste.pdf)
+[Oppdatert vaktliste for innesesongen 2024-2025](/documents/2024-2025-vaktliste.pdf)

@@ -6,17 +6,44 @@ import { buildICS } from "../../utils/ics";
 const events = (await getCollection("terminliste")).sort(
   (a, b) => a.data.date.valueOf() - b.data.date.valueOf()
 );
+
+const links = [
+  {
+    href: "https://www.skyting.no/pistol/terminliste-pistol-2/",
+    label: "Terminliste hos NSF",
+    description: "Alle approberte pistolstevner i Norge.",
+  },
+  {
+    href: "https://app.skyting.no/",
+    label: "SkytterAdmin",
+    description: "Startkort, påmelding til stevner og resultater.",
+  },
+  {
+    href: "https://app.rubic.no/",
+    label: "RUBIC",
+    description: "Medlemskap, kontingent og egne medlemsopplysninger.",
+  },
+];
 ---
 
-<Layout title="Terminliste" description="Terminliste for klubbarrangementer og lenke til NSFs offisielle terminliste for pistolstevner.">
+<Layout title="Terminliste" description="Terminliste for klubbarrangementer og lenker til NSFs terminliste, SkytterAdmin og RUBIC.">
   <h1>Terminliste</h1>
   <p class="lead">
-    Norges Skytterforbunds terminliste viser alle approberte pistolstevner
-    i Norge:
-    <a href="https://www.skyting.no/pistol/terminliste-pistol-2/" target="_blank" rel="noopener">
-      Se terminliste hos NSF<span class="sr-only"> (åpnes i ny fane)</span>
-    </a>
+    Her finner du klubbens egne arrangementer. Stevner utenfor klubben,
+    påmelding og medlemsopplysninger administreres i Skytterforbundets
+    systemer:
   </p>
+
+  <ul class="link-cards">
+    {links.map((link) => (
+      <li>
+        <a href={link.href} target="_blank" rel="noopener">
+          {link.label}<span class="sr-only"> (åpnes i ny fane)</span>
+        </a>
+        <span>{link.description}</span>
+      </li>
+    ))}
+  </ul>
 
   {events.length > 0 && (
     <>
@@ -67,6 +94,34 @@ const events = (await getCollection("terminliste")).sort(
 </Layout>
 
 <style>
+  .link-cards {
+    list-style: none;
+    padding: 0;
+    margin-block: 1.25rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .link-cards li {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    padding: 0.9rem 1rem;
+  }
+
+  .link-cards a {
+    font-weight: 600;
+  }
+
+  /* Direct child only, so the nested .sr-only span keeps its own styles. */
+  .link-cards > li > span {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
   .field {
     margin-bottom: 1rem;
     max-width: 24rem;

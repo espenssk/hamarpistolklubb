@@ -9,7 +9,7 @@ category: "Årsmøte"
 
 Dokumenter:
 
-- [Signert årsmøteprotokoll](http://www.hamarsportsskytterklubb.no/wp-content/uploads/2026/01/2026-02-19-aarsmote-Protokoll-signert.pdf)
-- [Årsregnskap](http://www.hamarsportsskytterklubb.no/wp-content/uploads/2026/01/2026-02-19-aars-regnskap.pdf)
-- [Oppdatert lovnorm for Hamar Pistolklubb](http://www.hamarsportsskytterklubb.no/wp-content/uploads/2026/01/lovnorm-for-Hamar-Pistolklubb.pdf)
-- [Saksdokumentene til årsmøtet, samlet i et dokument](http://www.hamarsportsskytterklubb.no/wp-content/uploads/2026/01/2026-02-19-aarsmote-saksdokumenter.pdf)
+- [Signert årsmøteprotokoll](/documents/2026-02-19-aarsmote-Protokoll-signert.pdf)
+- [Årsregnskap](/documents/2026-02-19-aars-regnskap.pdf)
+- [Oppdatert lovnorm for Hamar Pistolklubb](/documents/lovnorm-for-Hamar-Pistolklubb.pdf)
+- [Saksdokumentene til årsmøtet, samlet i et dokument](/documents/2026-02-19-aarsmote-saksdokumenter.pdf)

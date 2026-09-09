@@ -64,6 +64,13 @@ textarea:focus-visible {
   outline-offset: 2px;
 }
 
+/* Always reserve the scrollbar gutter, so short pages (e.g. /vapensoknad)
+   aren't ~15px wider than scrolling ones - otherwise every centred element,
+   including the nav and its dropdowns, shifts sideways between pages. */
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
   background: var(--color-bg);
@@ -218,6 +225,9 @@ a {
   font-weight: 500;
   text-transform: none;
   letter-spacing: normal;
+  /* .header-inner centres the logo/nav row; opt out so menu items of
+     differing length share a left edge instead of looking ragged. */
+  text-align: left;
   white-space: nowrap;
 }
 
@@ -396,6 +406,17 @@ h2 {
   object-fit: cover;
 }
 
+/* Opt-in via `imageFit: "contain"` in a post's frontmatter: shows the whole
+   image on a light backdrop rather than cropping it to the 4:3 frame. */
+.news-card-media[data-fit="contain"] {
+  background: #fff;
+  padding: clamp(0.75rem, 3%, 1.75rem);
+}
+
+.news-card-media[data-fit="contain"] img {
+  object-fit: contain;
+}
+
 .news-card-placeholder {
   display: flex;
   align-items: center;
@@ -547,22 +568,19 @@ th {
   align-items: stretch;
 }
 
+/* Keep grid items from being widened by their contents. */
+.split > * {
+  min-width: 0;
+}
+
 .split .image-frame {
   margin: 0;
-  aspect-ratio: auto;
-  height: clamp(220px, 40vw, 360px);
+  aspect-ratio: 4 / 3;
 }
 
+/* The carousel sets the row height via its aspect ratio; the map matches it. */
 .split .map-embed {
   margin: 0;
-  height: clamp(220px, 40vw, 360px);
-}
-
-.split .split-carousel {
-  height: clamp(220px, 40vw, 360px);
-}
-
-.split .split-carousel .carousel {
   height: 100%;
 }
 
@@ -573,6 +591,11 @@ th {
 @media (max-width: 720px) {
   .split {
     grid-template-columns: 1fr;
+  }
+
+  .split .map-embed {
+    height: auto;
+    aspect-ratio: 4 / 3;
   }
 }
 
@@ -653,6 +676,13 @@ th {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 /* Site search dialog */

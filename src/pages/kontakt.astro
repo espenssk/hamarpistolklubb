@@ -37,18 +37,19 @@ const base = import.meta.env.BASE_URL;
     */}
     <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
     <input type="hidden" name="subject" id="subject" value="Ny henvendelse fra hjemmesiden" />
+    <input type="hidden" name="from_name" value="Hamar Pistolklubb – kontaktskjema" />
     <input type="hidden" name="redirect" value={`${base}kontakt/takk`} />
     {/* Honeypot: leave empty, catches spam bots */}
     <input type="checkbox" name="botcheck" class="hidden-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
     <div class="field">
       <label for="emne">Hva gjelder henvendelsen? *</label>
-      <select id="emne" name="emne" required>
+      <select id="emne" name="Emne" required>
         <option value="" disabled selected>Velg emne</option>
         <option value="Sikkerhetskurs">Sikkerhetskurs</option>
         <option value="Medlemskap">Medlemskap</option>
-        <option value="Banetider">Banetider / utleie av bane</option>
-        <option value="Vapensoknad">Våpensøknad</option>
+        <option value="Banetider / utleie av bane">Banetider / utleie av bane</option>
+        <option value="Våpensøknad">Våpensøknad</option>
         <option value="Annet">Annet</option>
       </select>
     </div>
@@ -57,7 +58,7 @@ const base = import.meta.env.BASE_URL;
       <label for="name">Navn *</label>
       <input
         id="name"
-        name="name"
+        name="Navn"
         type="text"
         required
         autocomplete="name"
@@ -67,6 +68,8 @@ const base = import.meta.env.BASE_URL;
       />
     </div>
 
+    {/* Must stay named "email": Web3Forms uses this field as the Reply-To
+        address, so renaming it would break replying to the sender. */}
     <div class="field">
       <label for="email">E-post *</label>
       <input id="email" name="email" type="email" required autocomplete="email" maxlength="254" />
@@ -76,7 +79,7 @@ const base = import.meta.env.BASE_URL;
       <label for="phone">Telefon</label>
       <input
         id="phone"
-        name="phone"
+        name="Telefon"
         type="tel"
         autocomplete="tel"
         maxlength="20"
@@ -87,12 +90,12 @@ const base = import.meta.env.BASE_URL;
 
     <div class="field">
       <label for="message">Melding *</label>
-      <textarea id="message" name="message" rows="5" required maxlength="4000"></textarea>
+      <textarea id="message" name="Melding" rows="5" required maxlength="4000"></textarea>
     </div>
 
     <div class="field field-checkbox">
       <label>
-        <input type="checkbox" name="samtykke" value="Ja" required />
+        <input type="checkbox" id="samtykke" name="Samtykke" value="Ja" required />
         Jeg samtykker til at Hamar Pistolklubb lagrer og behandler
         opplysningene jeg oppgir her, for å kunne svare på henvendelsen. *
       </label>
@@ -184,10 +187,20 @@ const base = import.meta.env.BASE_URL;
   const subjectByTopic: Record<string, string> = {
     Sikkerhetskurs: "Ny henvendelse - Sikkerhetskurs",
     Medlemskap: "Ny henvendelse - Medlemskap",
-    Banetider: "Ny henvendelse - Banetider/utleie",
-    Vapensoknad: "Ny henvendelse - Våpensøknad",
+    "Banetider / utleie av bane": "Ny henvendelse - Banetider/utleie",
+    "Våpensøknad": "Ny henvendelse - Våpensøknad",
     Annet: "Ny henvendelse - Annet",
   };
+
+  // Native validation already blocks submitting without consent; this only
+  // replaces the browser's default English wording.
+  const samtykke = document.getElementById("samtykke") as HTMLInputElement | null;
+  const setConsentMessage = () =>
+    samtykke?.setCustomValidity(
+      samtykke.checked ? "" : "Du må samtykke før du kan sende meldingen."
+    );
+  setConsentMessage();
+  samtykke?.addEventListener("change", setConsentMessage);
 
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();

@@ -6,11 +6,17 @@ import rangeImage from "../assets/images/range_3.jpg";
 const board = [
   { role: "Leder", name: "Jan Olav Nordhagen" },
   { role: "Nestleder", name: "Arne Vemund Bækken" },
+  { role: "Kasserer", name: "Deles mellom leder og nestleder" },
   { role: "Styremedlem", name: "Bengt Olav Helmersen" },
   { role: "Styremedlem", name: "Tore Engemoen" },
   { role: "Styremedlem", name: "Jørn Jørgensen" },
   { role: "Styremedlem", name: "Jørn Marken" },
+  { role: "Varamedlem", name: "Lise Vassenden" },
+  { role: "Varamedlem", name: "Siri Kristin Engebretsen" },
 ];
+
+const base = import.meta.env.BASE_URL;
+const withBase = (path: string) => base + path.replace(/^\//, "");
 ---
 
 <Layout title="Om klubben" description="Om Hamar Pistolklubb – historie og styret.">
@@ -48,6 +54,12 @@ const board = [
       ))}
     </tbody>
   </table>
+
+  <p>
+    Referater fra styremøter, årsmøteprotokoller og klubbens lover finner du
+    på <a href={withBase("/styreinfo")}>styreinfo</a>.
+    For å nå styret, bruk <a href={withBase("/kontakt")}>kontaktsiden</a>.
+  </p>
 </Layout>
 
 <style>
