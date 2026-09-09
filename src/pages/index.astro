@@ -14,6 +14,11 @@ const proofPoints = [
   { value: "300+", label: "Medlemmer" },
 ];
 
+// BASE_URL always ends with "/" - turns a root-relative path like "/kontakt"
+// into a link that works under whichever base astro.config.mjs builds with.
+const base = import.meta.env.BASE_URL;
+const withBase = (path: string) => base + path.replace(/^\//, "");
+
 const news = (await getCollection("nyheter"))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 6);
@@ -53,7 +58,7 @@ const upcomingEvents = (await getCollection("terminliste"))
         og sikker skyteopplæring, og har et sosialt og inkluderende
         miljø.
       </p>
-      <a class="button" href="/kontakt">Kontakt oss</a>
+      <a class="button" href={withBase("/kontakt")}>Kontakt oss</a>
     </div>
 
     <div class="hero-stats" aria-label="Om klubben i korte trekk">
@@ -74,7 +79,7 @@ const upcomingEvents = (await getCollection("terminliste"))
         <div class="news-grid">
           {news.map((post, index) => (
             <NewsCard
-              href={`/nyheter/${post.id}`}
+              href={withBase(`/nyheter/${post.id}`)}
               title={post.data.title}
               date={post.data.date}
               category={post.data.category}
@@ -82,7 +87,7 @@ const upcomingEvents = (await getCollection("terminliste"))
               featured={index === 0}
             />
           ))}
-          <a class="news-card news-card-viewall" href="/nyheter">
+          <a class="news-card news-card-viewall" href={withBase("/nyheter")}>
             <span class="news-card-viewall-media" aria-hidden="true">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14" />
@@ -131,7 +136,7 @@ const upcomingEvents = (await getCollection("terminliste"))
         ) : (
           <p class="lead" style="flex: 1;">Ingen planlagte arrangementer akkurat nå.</p>
         )}
-        <a class="button" href="/terminliste">Se hele terminlisten</a>
+        <a class="button" href={withBase("/terminliste")}>Se hele terminlisten</a>
       </aside>
     </div>
   </div>

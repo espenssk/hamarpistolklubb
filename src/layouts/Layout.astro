@@ -22,6 +22,12 @@ const {
   hideSponsorStrip = false,
 } = Astro.props;
 
+// BASE_URL always ends with "/" (e.g. "/" or "/hps-homepage/"). withBase()
+// turns a root-relative path like "/kontakt" into a link that works under
+// whichever base astro.config.mjs is set to build with.
+const base = import.meta.env.BASE_URL;
+const withBase = (path: string) => base + path.replace(/^\//, "");
+
 const navItems = [
   { href: "/nyheter", label: "Nyheter" },
   { href: "/skytebane", label: "Skytebane" },
@@ -35,7 +41,7 @@ const membershipMenu = [
 
 const currentPath = Astro.url.pathname;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageURL = new URL(ogImage, Astro.site);
+const ogImageURL = new URL(withBase(ogImage), Astro.site);
 ---
 
 <html lang="no">
@@ -45,9 +51,9 @@ const ogImageURL = new URL(ogImage, Astro.site);
     <meta name="description" content={description} />
     <meta name="theme-color" content="#0e7490" />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/images/logo.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <link rel="apple-touch-icon" href={withBase("/images/logo.png")} />
+    <link rel="manifest" href={withBase("/site.webmanifest")} />
     <title>{title} · Hamar Pistolklubb</title>
 
     <!-- Display font matching the logo's blocky, tracked caps style -->
@@ -76,7 +82,7 @@ const ogImageURL = new URL(ogImage, Astro.site);
 
     <header class="site-header">
       <div class="container header-inner">
-        <a class="brand" href="/">
+        <a class="brand" href={base}>
           <Image class="logo" src={logoHorizontal} alt="Hamar Pistolklubb" width={4164} height={1037} />
         </a>
 
@@ -94,15 +100,15 @@ const ogImageURL = new URL(ogImage, Astro.site);
         <nav aria-label="Hovedmeny" id="primary-nav">
           <ul class="nav-links">
             <li>
-              <a href="/" aria-current={currentPath === "/" ? "page" : undefined}>
+              <a href={base} aria-current={currentPath === base ? "page" : undefined}>
                 Hjem
               </a>
             </li>
             {navItems.map((item) => (
               <li>
                 <a
-                  href={item.href}
-                  aria-current={currentPath === item.href ? "page" : undefined}
+                  href={withBase(item.href)}
+                  aria-current={currentPath === withBase(item.href) ? "page" : undefined}
                 >
                   {item.label}
                 </a>
@@ -116,7 +122,7 @@ const ogImageURL = new URL(ogImage, Astro.site);
                 aria-haspopup="true"
                 aria-expanded="false"
                 aria-controls="membership-menu"
-                aria-current={membershipMenu.some((item) => item.href === currentPath) ? "page" : undefined}
+                aria-current={membershipMenu.some((item) => withBase(item.href) === currentPath) ? "page" : undefined}
               >
                 Medlemskap
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
@@ -125,8 +131,8 @@ const ogImageURL = new URL(ogImage, Astro.site);
                 {membershipMenu.map((item) => (
                   <li>
                     <a
-                      href={item.href}
-                      aria-current={currentPath === item.href ? "page" : undefined}
+                      href={withBase(item.href)}
+                      aria-current={currentPath === withBase(item.href) ? "page" : undefined}
                     >
                       {item.label}
                     </a>
@@ -135,12 +141,12 @@ const ogImageURL = new URL(ogImage, Astro.site);
               </ul>
             </li>
             <li>
-              <a href="/kontakt" aria-current={currentPath === "/kontakt" ? "page" : undefined}>
+              <a href={withBase("/kontakt")} aria-current={currentPath === withBase("/kontakt") ? "page" : undefined}>
                 Kontakt
               </a>
             </li>
             <li>
-              <a href="/om-klubben" aria-current={currentPath === "/om-klubben" ? "page" : undefined}>
+              <a href={withBase("/om-klubben")} aria-current={currentPath === withBase("/om-klubben") ? "page" : undefined}>
                 Om oss
               </a>
             </li>
@@ -186,7 +192,7 @@ const ogImageURL = new URL(ogImage, Astro.site);
       <div class="container">
         <span>&copy; {new Date().getFullYear()} Hamar Pistolklubb</span>
         <span>
-          <a href="/kontakt">Kontakt oss</a>
+          <a href={withBase("/kontakt")}>Kontakt oss</a>
         </span>
       </div>
     </footer>
@@ -280,7 +286,7 @@ const ogImageURL = new URL(ogImage, Astro.site);
 
       async function loadIndex() {
         if (index) return index;
-        const res = await fetch("/search.json");
+        const res = await fetch(`${import.meta.env.BASE_URL}search.json`);
         index = (await res.json()) as SearchEntry[];
         return index;
       }
