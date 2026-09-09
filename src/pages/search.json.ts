@@ -62,7 +62,7 @@ const staticPages = [
     text: "styreinfo referat fra styremøte årsmøte protokoll årsregnskap saksdokumenter lovnorm klubbens lover dokumenter",
   },
   {
-    url: withBase("/nyheter"),
+    url: withBase("/nyheter/"),
     title: "Nyheter",
     text: "nyheter arkiv nytt fra klubben",
   },
@@ -72,7 +72,7 @@ export const GET: APIRoute = async () => {
   const posts = await getCollection("nyheter");
 
   const newsEntries = posts.map((post) => ({
-    url: withBase(`/nyheter/${post.id}`),
+    url: withBase(`/nyheter/${post.id}/`),
     title: post.data.title,
     text: [post.data.summary, stripMarkdown(post.body ?? "")].filter(Boolean).join(" "),
   }));

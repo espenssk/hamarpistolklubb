@@ -148,6 +148,28 @@ const links = [
     white-space: nowrap;
     font-size: 0.9rem;
   }
+
+  @media (max-width: 720px) {
+    #events-table {
+      font-size: 0.9rem;
+    }
+
+    #events-table th,
+    #events-table td {
+      padding: 0.45rem 0.5rem;
+    }
+
+    #events-table td:nth-child(2),
+    #events-table td:nth-child(3) {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .ics-link {
+      white-space: normal;
+      font-size: 0.82rem;
+    }
+  }
 </style>
 
 <script>
@@ -174,4 +196,3 @@ const links = [
     }
   });
 </script>
-

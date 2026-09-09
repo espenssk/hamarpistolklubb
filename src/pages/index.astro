@@ -79,7 +79,7 @@ const upcomingEvents = (await getCollection("terminliste"))
         <div class="news-grid">
           {news.map((post, index) => (
             <NewsCard
-              href={withBase(`/nyheter/${post.id}`)}
+              href={withBase(`/nyheter/${post.id}/`)}
               title={post.data.title}
               date={post.data.date}
               category={post.data.category}
@@ -286,8 +286,12 @@ const upcomingEvents = (await getCollection("terminliste"))
   }
 
   .hero-stat-label {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.4em;
     font-size: 0.78rem;
+    line-height: 1.2;
     color: rgba(255, 255, 255, 0.75);
   }
 
@@ -520,5 +524,59 @@ const upcomingEvents = (await getCollection("terminliste"))
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     }
   }
-</style>
 
+  @media (max-width: 720px) {
+    .hero-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-content .lead {
+      max-width: 34ch;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-stats-inner {
+      flex-wrap: nowrap;
+      gap: 0.5rem;
+      padding-block: 0.55rem;
+    }
+
+    .hero-stat {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .hero-stat-value {
+      font-size: 0.9rem;
+    }
+
+    .hero-stat-label {
+      font-size: 0.62rem;
+      line-height: 1.2;
+    }
+
+    .home-sponsors h2,
+    .home-events h2 {
+      text-align: center;
+    }
+
+    .home-sponsors-grid {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .home-sponsors-grid a {
+      flex: none;
+      width: min(220px, 100%);
+      justify-content: center;
+    }
+
+    .home-events .button {
+      align-self: center;
+    }
+  }
+</style>
