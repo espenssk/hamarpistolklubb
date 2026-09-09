@@ -1,5 +1,20 @@
 # To-do
 
+- [ ] Set up a branch protection ruleset for `master` (Settings → Rules →
+      Rulesets → New ruleset): enforcement Active, bypass list = Repository
+      admin role only. Enable: Restrict deletions, Block force pushes,
+      Require a pull request before merging, Automatically request Copilot
+      code review. Skip signed commits/code scanning/code quality/coverage
+      (need paid features) and status checks (no PR-time CI check exists
+      yet). Once this is Active, update `MAINTAINER-GUIDE.md`'s wording
+      from "PR recommended" to "PR required" (direct commits to `master`
+      will no longer be possible for non-admins).
+- [ ] Once the club approves the site (currently only live at the default
+      `https://espenssk.github.io/hps-homepage/`), point the real domain:
+      add `hamarpistolklubb.no` to Settings → Pages → Custom domain, and
+      add the DNS records at the registrar - see `DEPLOYMENT.md` step 2.
+      The `public/CNAME` file alone does nothing for Actions-based Pages
+      deploys, so the Settings step can't be skipped.
 - [ ] Sign up for a free Web3Forms account and put the access key into
       `src/pages/kontakt.astro` (replaces `TODO-REPLACE-WITH-YOUR-WEB3FORMS-ACCESS-KEY`)
 - [ ] Wire up Terminliste + add a new Resultatlister page using NSF's official
