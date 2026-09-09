@@ -1,5 +1,5 @@
 ---
-title: "Høstfeltskyting"
+title: "Eksempel: Høstfeltskyting"
 date: 2026-10-04
 location: "Ankerskogen skytebane"
 ---
