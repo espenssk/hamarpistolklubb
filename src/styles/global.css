@@ -593,9 +593,17 @@ th {
     grid-template-columns: 1fr;
   }
 
+  /* Break the map out to the full device width instead of sitting
+     inside .container's side padding - matches how the map fills the
+     screen on Google's own mobile pages. */
   .split .map-embed {
     height: auto;
     aspect-ratio: 4 / 3;
+    width: calc(100% + 2 * clamp(1rem, 4vw, 1.5rem));
+    margin-inline: calc(-1 * clamp(1rem, 4vw, 1.5rem));
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
   }
 }
 

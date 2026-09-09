@@ -71,16 +71,16 @@ const links = [
         <tbody>
           {events.map((event) => (
             <tr data-search={`${event.data.title} ${event.data.location ?? ""}`.toLowerCase()}>
-              <td>{event.data.date.toLocaleDateString("no-NO")}</td>
-              <td>{event.data.title}</td>
-              <td>{event.data.location ?? "—"}</td>
+              <td data-label="Dato">{event.data.date.toLocaleDateString("no-NO")}</td>
+              <td data-label="Arrangement">{event.data.title}</td>
+              <td data-label="Sted">{event.data.location ?? "—"}</td>
               <td>
                 <a
                   class="ics-link"
                   href={buildICS(event)}
                   download={`${event.id}.ics`}
                 >
-                  + Kalender
+                  +&nbsp;Kalender
                 </a>
               </td>
             </tr>
@@ -149,25 +149,67 @@ const links = [
     font-size: 0.9rem;
   }
 
+  /* Below 720px there isn't room for 4 real columns without squeezing
+     "Arrangement"/"Sted" so tight that long words like "Ankerskogen"
+     get broken mid-word. Instead, each row becomes a card and each
+     cell becomes a labelled block (label from the data-label attribute),
+     stacked full-width so nothing needs to wrap awkwardly. */
   @media (max-width: 720px) {
     #events-table {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
     }
 
-    #events-table th,
+    #events-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    #events-table,
+    #events-table tbody,
+    #events-table tr,
     #events-table td {
-      padding: 0.45rem 0.5rem;
+      display: block;
+      width: 100%;
     }
 
-    #events-table td:nth-child(2),
-    #events-table td:nth-child(3) {
-      overflow-wrap: anywhere;
-      word-break: break-word;
+    #events-table tr {
+      margin-bottom: 0.9rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 0.75rem 0.9rem;
+    }
+
+    #events-table tr:last-child {
+      margin-bottom: 0;
+    }
+
+    #events-table td {
+      padding: 0.3rem 0;
+      border-bottom: none;
+      overflow-wrap: break-word;
+    }
+
+    #events-table td[data-label]::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: var(--color-muted);
+      margin-bottom: 0.1rem;
+    }
+
+    #events-table td:last-child {
+      padding-top: 0.5rem;
     }
 
     .ics-link {
-      white-space: normal;
-      font-size: 0.82rem;
+      font-size: 0.9rem;
     }
   }
 </style>
