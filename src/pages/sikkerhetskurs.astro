@@ -1,5 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const base = import.meta.env.BASE_URL;
+const withBase = (path: string) => base + path.replace(/^\//, "");
 ---
 
 <Layout title="Sikkerhetskurs" description="Sikkerhetskurs for pistolskyting hos Hamar Pistolklubb – pris, opptak og hva som kreves etter kurset.">
@@ -23,7 +26,7 @@ import Layout from "../layouts/Layout.astro";
   <h2>Påmelding</h2>
   <p>
     For påmelding til sikkerhetskurs, ta kontakt med Arne Vemund Bækken (nestleder) eller Jan Olav Nordhagen
-    (leder) via <a href="/kontakt">kontaktsiden</a>.
+    (leder) via <a href={withBase("/kontakt")}>kontaktsiden</a>.
   </p>
 
   <h2>Etter kurset</h2>
@@ -31,7 +34,7 @@ import Layout from "../layouts/Layout.astro";
     I starten trenger du ikke kjøpe noe selv – klubben har utlånsvåpen og
     hørselsvern/briller så du kan prøve sporten før du investerer selv.
     Når du senere ønsker å søke om eget våpen, se
-    <a href="/vapensoknad">våpensøknad</a> for hva som kreves.
+    <a href={withBase("/vapensoknad")}>våpensøknad</a> for hva som kreves.
   </p>
 </Layout>
 

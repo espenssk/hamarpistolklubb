@@ -1,5 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const base = import.meta.env.BASE_URL;
+const withBase = (path: string) => base + path.replace(/^\//, "");
 ---
 
 <Layout title="Våpensøknad" description="Slik søker du om eget våpen etter sikkerhetskurs hos Hamar Pistolklubb – krav og uttalelse fra klubben.">
@@ -21,7 +24,7 @@ import Layout from "../layouts/Layout.astro";
   <h2>Uttalelse fra klubben</h2>
   <p>
     Skal du søke om våpen, skal det følge med en uttalelse fra klubben.
-    Ta kontakt med styret via <a href="/kontakt">kontaktsiden</a> for å få
+    Ta kontakt med styret via <a href={withBase("/kontakt")}>kontaktsiden</a> for å få
     tilsendt vedlegget til søknaden.
   </p>
   <p>
