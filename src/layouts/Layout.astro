@@ -229,16 +229,14 @@ const ogImageURL = new URL(withBase(ogImage), Astro.site);
 
       function initMobileNav() {
         const toggle = document.getElementById("nav-toggle");
-        const nav = document.getElementById("primary-nav");
-        if (!toggle || !nav) return;
-        if (toggle.dataset.bound === "true") return;
+        if (!toggle) return;
 
-        toggle.addEventListener("click", () => {
+        toggle.onclick = () => {
+          const nav = document.getElementById("primary-nav");
+          if (!nav) return;
           const isOpen = nav.classList.toggle("is-open");
           toggle.setAttribute("aria-expanded", String(isOpen));
-        });
-
-        toggle.dataset.bound = "true";
+        };
       }
 
       initMobileNav();
