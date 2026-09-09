@@ -79,7 +79,7 @@ const upcomingEvents = (await getCollection("terminliste"))
         <div class="news-grid">
           {news.map((post, index) => (
             <NewsCard
-              href={withBase(`/nyheter/${post.id}`)}
+              href={withBase(`/nyheter/${post.id}/`)}
               title={post.data.title}
               date={post.data.date}
               category={post.data.category}
@@ -481,24 +481,43 @@ const upcomingEvents = (await getCollection("terminliste"))
 
   @media (max-width: 520px) {
     .hero-stats-inner {
-      flex-direction: column;
-      gap: 0.4rem;
+      flex-wrap: nowrap;
+      gap: 0.5rem;
       padding-block: 0.55rem;
     }
 
     .hero-stat {
-      flex: none;
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .hero-stat-value {
+      font-size: 0.9rem;
+    }
+
+    .hero-stat-label {
+      font-size: 0.62rem;
+      line-height: 1.2;
+    }
+
+    .home-sponsors h2,
+    .home-events h2 {
+      text-align: center;
     }
 
     .home-sponsors-grid {
       flex-direction: column;
-      align-items: stretch;
+      align-items: center;
     }
 
     .home-sponsors-grid a {
       flex: none;
-      width: 100%;
+      width: min(220px, 100%);
       justify-content: center;
+    }
+
+    .home-events .button {
+      align-self: center;
     }
   }
 </style>

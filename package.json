@@ -10,7 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "npm run build && gh-pages -d dist -t true"
+    "deploy": "SITE_URL=https://espenssk.github.io BASE_PATH=/hps-homepage/ npm run build && gh-pages -d dist -t true"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

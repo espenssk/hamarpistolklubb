@@ -57,7 +57,7 @@ const staticPages = [
     text: "om klubben historie stiftet 1954 Hamar Idrettslag 2017 nytt navn styret leder nestleder styremedlem",
   },
   {
-    url: withBase("/nyheter"),
+    url: withBase("/nyheter/"),
     title: "Nyheter",
     text: "nyheter arkiv nytt fra klubben",
   },
@@ -67,7 +67,7 @@ export const GET: APIRoute = async () => {
   const posts = await getCollection("nyheter");
 
   const newsEntries = posts.map((post) => ({
-    url: withBase(`/nyheter/${post.id}`),
+    url: withBase(`/nyheter/${post.id}/`),
     title: post.data.title,
     text: [post.data.summary, stripMarkdown(post.body ?? "")].filter(Boolean).join(" "),
   }));
