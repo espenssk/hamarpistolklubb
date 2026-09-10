@@ -238,8 +238,20 @@ a {
 }
 
 @media (max-width: 720px) {
+  .nav-links > li {
+    width: 100%;
+    text-align: center;
+  }
+
   .nav-dropdown {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-dropdown-toggle {
+    justify-content: center;
   }
 
   .nav-dropdown-menu {
