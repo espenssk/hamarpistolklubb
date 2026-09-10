@@ -30,10 +30,10 @@ jobs:
           node-version: "22"
         env:
           # TODO: remove SITE_URL/BASE_PATH once testing moves off the GitHub
-          # Pages project URL (espenssk.github.io/hps-homepage/) and onto the
+          # Pages project URL (espenssk.github.io/hamarpistolklubb/) and onto the
           # custom domain, which is served from "/" and needs no base path.
           SITE_URL: https://espenssk.github.io
-          BASE_PATH: /hps-homepage/
+          BASE_PATH: /hamarpistolklubb/
 
   deploy:
     needs: build
