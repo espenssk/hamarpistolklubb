@@ -283,6 +283,8 @@ const ogImageURL = new URL(withBase(ogImage), Astro.site);
         const toggle = document.getElementById(toggleId);
         const menu = document.getElementById(menuId);
         if (!toggle || !menu) return;
+        if (toggle.dataset.dropdownReady === "true") return;
+        toggle.dataset.dropdownReady = "true";
 
         function close() {
           toggle!.setAttribute("aria-expanded", "false");
